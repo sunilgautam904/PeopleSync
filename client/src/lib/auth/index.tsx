@@ -11,22 +11,32 @@ const nextAuthOptions = {
         password: {},
       },
       async authorize(credentials) {
-        const res = await axios.post(
-          "http://localhost:3000/api/auth/login",
-          credentials,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
+        if (credentials === null) return null;
+        try {
+          const res = await fetch(`http://localhost:3000/api/auth/login`, {
+            method: "POST",
+            body: JSON.stringify(credentials),
+            headers: { "Content-Type": "application/json" },
+          });
+          if (!res.ok) {
+            return null;
           }
-        );
-        if (res.status === 200) {
-            console.log('response', res.data);
-          // Return the user object
-          return res.data.data;
-        } else {
-          throw new Error("Login failed");
+          const { data } = await res.json();
+          // console.log("parsedResponse", data);
+
+          const accessToken = data.accessToken;
+          const refreshToken = data.refreshToken;
+          const name = data?.name;
+
+          console.log(refreshToken);
+          return {
+            accessToken,
+            refreshToken,
+            name,
+          };
+        } catch (e) {
+          console.error(e);
+          return null;
         }
       },
     }),
@@ -35,22 +45,37 @@ const nextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({
+      token,
+      account,
+      user,
+    }: {
+      token: any;
+      account: any;
+      user: any;
+    }) {
+      console.log(`In jwt callback - Token isa ${user})}`);
+
       // Attach user to the token if it exists
       if (user) {
-        token.user = user;
+        return {
+          ...token,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+        };
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       // Attach user from token to session
       if (token.user) {
-        session.user = token.user;
+        session.accessToken = token.user.accessToken;
+        session.refreshToken = token.user.refreshToken;
       }
       return session;
     },
   },
-  secret: 'NEXTAUTH_SECRET',
+  secret: "NEXTAUTH_SECRET",
   debug: true,
   pages: {
     signIn: "/sign-in",

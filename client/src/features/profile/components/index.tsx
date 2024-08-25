@@ -8,7 +8,9 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 
 export default function UserProfile() {
-  const {data: session} = useSession();
+  const {data: session, status} = useSession();
+  
+  console.log('UserProfile', session, status)
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-242.5">
