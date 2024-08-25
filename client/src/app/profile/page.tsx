@@ -12,6 +12,6 @@ export const metadata: Metadata = {
  * enhancing SEO and user experience. The page includes the `UserProfile` component which handles the display of user details.
  * @returns {JSX.Element} The profile page containing the `UserProfile` component.
  */
-export default function Profile() {
+export default function Profile(): JSX.Element {
   return <UserProfile />;
 }

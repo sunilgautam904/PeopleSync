@@ -32,8 +32,8 @@ export const loginUser = async (data: { email: string; password: string }) => {
   const { accessToken, refreshToken } = await generateTokens(
     user._id.toString()
   );
-  console.log("Generating", accessToken, refreshToken);
-  return { accessToken, refreshToken };
+  console.log("Generating", user.name, accessToken, refreshToken);
+  return { accessToken, refreshToken, name: user.name };
 };
 
 export const refreshToken = async (token: string) => {

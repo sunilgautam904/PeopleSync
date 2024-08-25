@@ -3,17 +3,14 @@ import DefaultLayout from "@/common/components/layouts/DefaultLayout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+  title: "Dashboard | PeopleSync",
+  description: "This is the Dashboard page.",
 };
 
-export default function Home() {
+export default async function DashboardPage() {
   return (
-    <>
-      <DefaultLayout>
-        <Dashboard />
-      </DefaultLayout>
-    </>
+    <DefaultLayout>
+      <Dashboard />
+    </DefaultLayout>
   );
 }

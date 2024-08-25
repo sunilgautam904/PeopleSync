@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { accessToken, refreshToken } = await loginUser(req.body);
+    const { accessToken, refreshToken, name } = await loginUser(req.body);
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: true
@@ -31,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
     res.status(200).json({
       status: "success",
       message: "Logged in successfully",
-      data: { accessToken, refreshToken },
+      data: { accessToken, refreshToken, name },
     });
   } catch (error: any) {
     res.status(400).json({

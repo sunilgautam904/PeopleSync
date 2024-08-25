@@ -1,11 +1,14 @@
+'use client';
+
 import React from "react";
 import Breadcrumb from "@/common/components/breadcrumbs";
 import Image from "next/image";
-import { Metadata } from "next";
 import DefaultLayout from "@/common/components/layouts/DefaultLayout";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function UserProfile() {
+  const {data: session} = useSession();
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-242.5">
@@ -111,7 +114,7 @@ export default function UserProfile() {
             </div>
             <div className="mt-4">
               <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-                Danish Heilium
+                {session?.user.name}
               </h3>
               <p className="font-medium">Ui/Ux Designer</p>
               <div className="mx-auto mb-5.5 mt-4.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">

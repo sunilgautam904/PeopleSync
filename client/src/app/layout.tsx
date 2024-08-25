@@ -3,11 +3,14 @@ import "@/css/satoshi.css";
 import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/common/components/Loader";
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({
   children,
+  session
 }: Readonly<{
   children: React.ReactNode;
+  session: any
 }>) {
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -18,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          {loading ? <Loader /> : children}
-        </div>
+        <SessionProvider session={session}>
+          <div className="dark:bg-boxdark-2 dark:text-bodydark">
+            {loading ? <Loader /> : children}
+          </div>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -1,7 +1,8 @@
 "use client";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 /**
  * This component renders a responsive sign-in form for user authentication.
@@ -13,12 +14,17 @@ export default function SignInForm(): JSX.Element {
    * This method is used to sign in.
    * @param formData: Formdata includes email and password
    */
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    console.log("formData", Object.fromEntries(formData.entries()));
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const res = await signIn("credentials", { email, password, redirect: true, callbackUrl:`${window.location.origin}/`});
+    console.log('res--->', res);
+    if (res?.error) throw new Error(res.error);
+  }
+  
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark overflow-hidden">
       <div className=" p-48 flex flex-wrap">
@@ -61,7 +67,7 @@ export default function SignInForm(): JSX.Element {
               Sign In to PeopleSync
             </h2>
 
-            <form onSubmit={handleSignIn}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="mb-2.5 block font-medium text-black dark:text-white">
                   Email
@@ -69,6 +75,8 @@ export default function SignInForm(): JSX.Element {
                 <div className="relative">
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
@@ -100,6 +108,8 @@ export default function SignInForm(): JSX.Element {
                 <div className="relative">
                   <input
                     type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="6+ Characters, 1 Capital letter"
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
