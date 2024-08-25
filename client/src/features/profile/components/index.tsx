@@ -1,21 +1,42 @@
 'use client';
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "@/common/components/breadcrumbs";
 import Image from "next/image";
 import DefaultLayout from "@/common/components/layouts/DefaultLayout";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 export default function UserProfile() {
   const {data: session, status} = useSession();
   
   console.log('UserProfile', session, status)
+const[userData, setUserData] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/user', {
+          headers: {
+            'Authorization': `Bearer ${session?.user.accessToken}`, // Replace with your actual token
+            'Content-Type': 'application/json', // Add any other headers if needed
+          }
+        });
+        console.log('Response data:', response.data.data);
+        setUserData(response.data.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-242.5">
         <Breadcrumb pageName="Profile" />
-
+{JSON.stringify(userData)}
         <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="relative z-20 h-35 md:h-65">
             <Image

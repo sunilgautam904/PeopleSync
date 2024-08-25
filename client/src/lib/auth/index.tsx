@@ -66,12 +66,14 @@ const nextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      // Attach user from token to session
-      if (token.user) {
-        session.accessToken = token.user.accessToken;
-        session.refreshToken = token.user.refreshToken;
-      }
+    async session({ session, token, user }) {
+      session.user = {
+        ...session.user,
+        accessToken: token.accessToken as string,
+        refreshToken: token.refreshToken as string,
+        name: token.name as string,
+      };
+console.log('session((((', session);
       return session;
     },
   },

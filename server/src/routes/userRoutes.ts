@@ -4,10 +4,11 @@ import {
   getAllUsers,
   updateUser,
 } from "../controllers/userController";
+import { authenticate } from "../middleware/authMiddleware";
 
 const userRoutes = Router();
 
-userRoutes.get("/", getAllUsers);
+userRoutes.get("/", authenticate, getAllUsers);
 userRoutes.post("/", createUser);
 userRoutes.put("/:id", updateUser);
 

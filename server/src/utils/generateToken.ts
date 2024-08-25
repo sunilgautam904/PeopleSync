@@ -4,7 +4,7 @@ import UserToken from "../models/UserToken";
 // Generate Access Token
 export const generateAccessToken = (userId: string) => {
   const accessSecret = process.env.JWT_ACCESS_SECRET || "";
-  const accessExpiry = process.env.JWT_ACCESS_EXPIRY || "1m";
+  const accessExpiry = process.env.JWT_ACCESS_EXPIRY || "10s";
 
   const accessToken = jwt.sign({ userId }, accessSecret, {
     expiresIn: accessExpiry,
